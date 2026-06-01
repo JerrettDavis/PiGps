@@ -35,5 +35,5 @@ jobs:
             ~/.platformio
             ~/.cache/pip
           key: pio-${{ runner.os }}-${{ hashFiles('platformio.ini') }}
-      - run: pip install --upgrade platformio
+      - run: pip install -r requirements.txt
       - run: pio run -e pico
