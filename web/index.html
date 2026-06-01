@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>PiGps</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Toast / banner (hidden by default) -->
+  <div id="toastBanner" class="toast toast-error" hidden>
+    <span id="toastMsg"></span>
+    <button id="toastDismiss" class="toast-dismiss" aria-label="Dismiss">✕</button>
+  </div>
+
+  <header>
+    <div class="header-title">
+      <h1>PiGps</h1>
+      <p>RP2040 + NEO-6M GPS over Web Serial</p>
+    </div>
+    <div class="header-right">
+      <span id="connectionPill" class="pill pill-gray">Disconnected</span>
+      <div class="actions">
+        <button id="connectBtn">Connect</button>
+        <button id="disconnectBtn" disabled>Disconnect</button>
+        <button id="recordBtn" disabled>Record</button>
+        <button id="downloadGpxBtn" disabled>Download GPX</button>
+        <button id="downloadCsvBtn" disabled>Download CSV</button>
+        <button id="clearTrackBtn" disabled>Clear Track</button>
+        <button id="rawOnBtn"  disabled>Raw On</button>
+        <button id="rawOffBtn" disabled>Raw Off</button>
+        <button id="statusBtn" disabled>Status</button>
+        <label class="auto-reconnect-label">
+          <input type="checkbox" id="autoReconnectCb" checked />
+          Auto-reconnect
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero fix panel -->
+    <section class="card hero">
+      <div><span class="label">Fix</span><strong id="fixState">-</strong></div>
+      <div><span class="label">Latitude</span><strong id="lat">-</strong></div>
+      <div><span class="label">Longitude</span><strong id="lon">-</strong></div>
+      <div><span class="label">Altitude</span><strong id="alt">-</strong></div>
+      <div><span class="label">Speed</span><strong id="speed">-</strong></div>
+      <div><span class="label">Course</span><strong id="course">-</strong></div>
+      <div><span class="label">Satellites</span><strong id="satSummary">-</strong></div>
+      <div>
+        <span class="label">Recording</span>
+        <strong>
+          <span id="recordCount">0</span> pts ·
+          <span id="recordDist">0.00 km</span> ·
+          <span id="recordDur">-</span>
+        </strong>
+      </div>
+    </section>
+
+    <!-- Map + Quality panels -->
+    <section class="grid two">
+      <div class="card">
+        <h2>Location</h2>
+        <!-- Leaflet map — explicit height set in CSS -->
+        <div id="map" class="map-container"></div>
+      </div>
+
+      <div class="card">
+        <h2>Quality &amp; Stats</h2>
+        <dl class="stats">
+          <dt>UTC</dt>               <dd id="utc">-</dd>
+          <dt>Quality</dt>           <dd id="quality">-</dd>
+          <dt>Mode</dt>              <dd id="mode">-</dd>
+          <dt>Used / in view / fresh</dt><dd id="satsUsed">-</dd>
+          <dt>HDOP / PDOP / VDOP</dt><dd id="dop">-</dd>
+          <dt>Total / valid / bad</dt><dd id="checksums">-</dd>
+          <dt>Overflowed</dt>        <dd id="overflowed">-</dd>
+          <dt>Last sentence age</dt> <dd id="age">-</dd>
+          <dt>Raw bytes total</dt>   <dd id="rawBytes">-</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Sky view + Satellite table -->
+    <section class="grid two">
+      <div class="card">
+        <h2>Sky view</h2>
+        <canvas id="sky" width="520" height="520"></canvas>
+      </div>
+      <div class="card">
+        <h2>Visible satellites</h2>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PRN</th>
+                <th>Used</th>
+                <th>Elevation</th>
+                <th>Azimuth</th>
+                <th>SNR</th>
+              </tr>
+            </thead>
+            <tbody id="satRows">
+              <tr><td colspan="5">No satellite frames yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Raw JSON log -->
+    <section class="card">
+      <h2>Raw JSON stream</h2>
+      <pre id="log"></pre>
+    </section>
+
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

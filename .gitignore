@@ -1,0 +1,18 @@
+# Node / web
+web/node_modules/
+web/dist/
+node_modules/
+# PlatformIO / firmware
+.pio/
+# Build artifacts
+build/
+dist/
+*.uf2
+# Local agent / editor state
+.remember/
+.claude/
+.env
+.env.local
+.DS_Store
+# Superseded prototype (deleted, directory locked by OS)
+companion/
