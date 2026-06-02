@@ -3,6 +3,7 @@
 RP2040 (Raspberry Pi Pico) + NEO-6M GPS receiver that streams JSON over USB-CDC, with a browser web app showing a live map, position trail, polar skymap, satellite table, fix/DOP panel, and GPX/CSV recording.
 
 ![CI](https://github.com/JerrettDavis/PiGps/actions/workflows/ci.yml/badge.svg)
+![Pages](https://github.com/JerrettDavis/PiGps/actions/workflows/deploy-pages.yml/badge.svg)
 
 ## Features
 
