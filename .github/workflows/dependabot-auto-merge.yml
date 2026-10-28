@@ -18,7 +18,22 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Enable auto-merge for Dependabot PR
-        run: gh pr merge --auto --squash "$PR_URL"
+        run: |
+          # Auto-merge only queues the merge until required checks pass; GitHub can
+          # report "unstable status" while checks are still starting. Retry with
+          # backoff, and never fail the workflow if it still cannot be enabled.
+          for attempt in 1 2 3 4 5; do
+            if gh pr merge --auto --squash "$PR_URL"; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 5 ]; then
+              delay=$((attempt * 15))
+              echo "Attempt $attempt failed; retrying in ${delay}s..."
+              sleep "$delay"
+            fi
+          done
+          echo "::warning::Could not enable auto-merge for $PR_URL after 5 attempts (checks may still be in progress)."
+          exit 0
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
